@@ -21,11 +21,11 @@ module.exports = {
         
     },
     deleteCity: (req, res) => {
-        let {cityId} = req.params
+        let cityId = req.params.id
         sequelize.query(`
-            DELETE
-            FROM cities
-            WHERE ${cityId}
+        DELETE
+        FROM cities
+        WHERE city_id = ${cityId}
         `)
         .then((dbRes) => res.status(200).send(dbRes[0]))
         .catch(err => console.log(err))
@@ -42,9 +42,9 @@ module.exports = {
     },
     getCities: (req, res) => {
         sequelize.query(`
-            SELECT * FROM cities AS city
-            JOIN countries AS country
-            ON city.country_id = country.country_id
+           SELECT c.city_id, c.name AS city, c.rating, co.country_id, co.name AS country FROM cities AS c
+           JOIN countries AS co
+           ON co.country_id = c.country_id
             ORDER BY rating DESC;
         `)
         .then((dbRes) => {res.status(200).send(dbRes[0])})
